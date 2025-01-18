@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -21,7 +22,13 @@ class PostAdapter(private val postsList: List<Post>) : RecyclerView.Adapter<Post
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
         val post = postsList[position]
         holder.contentTextView.text = post.content
-        holder.imageView.setImageResource(post.imageResId)
+        // Загрузка изображения, если требуется
+        if (post.imageResId != 0) { // Проверяем, что идентификатор ресурса не равен 0
+            Glide.with(holder.itemView.context)
+                .load(post.imageResId)
+                .into(holder.imageView)
+        }
+
     }
 
     override fun getItemCount(): Int = postsList.size

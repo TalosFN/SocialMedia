@@ -78,22 +78,28 @@ class CreatePostActivity : AppCompatActivity() {
     }
 
     private fun savePostToDatabase(content: String, imageResId: Int) {
-        // Получаем uid текущего пользователя
-        val userId = auth.currentUser?.uid
-        if (userId != null) {
-            val post = Post(content, imageResId)
-            val postRef = database.child("users").child(userId).child("posts").push()
-            postRef.setValue(post)
-                .addOnSuccessListener {
-                    Toast.makeText(this, "Post created successfully", Toast.LENGTH_SHORT).show()
-                    finish()
-                }
-                .addOnFailureListener {
-                    Toast.makeText(this, "Error creating post", Toast.LENGTH_SHORT).show()
-                }
-        } else {
-            Toast.makeText(this, "User not logged in", Toast.LENGTH_SHORT).show()
-        }
+        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
+        val postId = database.child("posts").push().key ?: return
+
+        val post = Post(
+            content = content,
+            imageResId = imageResId,
+            userId = userId
+        )
+
+        val updates = hashMapOf<String, Any>(
+            "/users/$userId/posts/$postId" to post,
+            "/posts/$postId" to post
+        )
+
+        database.updateChildren(updates)
+            .addOnSuccessListener {
+                Toast.makeText(this, "Post created successfully", Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(this, "Failed to create post: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
     }
+
 }
 

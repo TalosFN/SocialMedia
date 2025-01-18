@@ -4,12 +4,14 @@ import Post
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import com.google.firebase.firestore.FirebaseFirestore
 
 
 class MainActivity : AppCompatActivity() {
@@ -20,10 +22,20 @@ class MainActivity : AppCompatActivity() {
     private val postsList = mutableListOf<Post>()
     private lateinit var auth: FirebaseAuth
     private lateinit var database: DatabaseReference
+    private lateinit var firestore: FirebaseFirestore
+    private lateinit var tvUsername: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_main)
+
+        auth = FirebaseAuth.getInstance()
+        firestore = FirebaseFirestore.getInstance()
+
+        tvUsername = findViewById(R.id.tvUsername)
+
+        loadNickname()
 
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance().reference
@@ -71,7 +83,24 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, "User not logged in", Toast.LENGTH_SHORT).show()
         }
     }
+    private fun loadNickname() {
+        val userId = FirebaseAuth.getInstance().currentUser?.uid
+        if (userId != null) {
+            val db = FirebaseFirestore.getInstance()
+            db.collection("users").document(userId)
+                .get()
+                .addOnSuccessListener { document ->
+                    val nickname = document.getString("nickname")
+                    val nicknameTextView = findViewById<TextView>(R.id.tvUsername)
+                    nicknameTextView.text = nickname ?: "Unknown User"
+                }
+                .addOnFailureListener {
+                    Toast.makeText(this, "Failed to load nickname", Toast.LENGTH_SHORT).show()
+                }
+        }
+    }
 }
+
 
 
 

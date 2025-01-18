@@ -38,9 +38,7 @@ class OtherUsersPostsActivity : AppCompatActivity() {
     }
 
     private fun loadAllPosts() {
-        // Загружаем все посты из общей коллекции posts
-        val postsRef = database.child("posts")
-        postsRef.addValueEventListener(object : ValueEventListener {
+        database.child("posts").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 postsList.clear()
                 for (postSnapshot in snapshot.children) {
@@ -53,8 +51,11 @@ class OtherUsersPostsActivity : AppCompatActivity() {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(this@OtherUsersPostsActivity, "Error loading posts", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@OtherUsersPostsActivity, "Failed to load posts", Toast.LENGTH_SHORT).show()
             }
         })
     }
+
+
+
 }
