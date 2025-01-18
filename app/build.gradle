@@ -1,0 +1,66 @@
+buildscript {
+    dependencies {
+        classpath libs.google.services
+    }
+}
+plugins {
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    id 'kotlin-kapt'
+    id 'com.google.gms.google-services'
+}
+
+android {
+    namespace 'com.example.socialmediaapp'
+    compileSdk 35
+
+    defaultConfig {
+        applicationId "com.example.socialmediaapp"
+        minSdk 24
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+    kotlinOptions {
+        jvmTarget = '11'
+    }
+}
+
+
+dependencies {
+
+    implementation libs.androidx.core.ktx
+    implementation libs.androidx.appcompat
+    implementation libs.material
+    implementation platform(libs.firebase.bom)
+    implementation libs.firebase.analytics
+    implementation(libs.google.firebase.auth)
+    implementation(libs.retrofit)
+    implementation 'com.google.firebase:firebase-database:20.2.2'
+    implementation("androidx.room:room-runtime:2.6.1")
+    implementation libs.firebase.firestore.ktx
+    implementation libs.firebase.storage.ktx
+    implementation libs.firebase.database
+    implementation 'com.github.bumptech.glide:glide:4.15.1'
+    implementation libs.firebase.firestore
+    kapt 'com.github.bumptech.glide:compiler:4.15.1'
+    kapt("androidx.room:room-compiler:2.5.0")
+    implementation libs.androidx.activity
+    implementation libs.androidx.constraintlayout
+    testImplementation libs.junit
+    androidTestImplementation libs.androidx.junit
+    androidTestImplementation libs.androidx.espresso.core
+}
