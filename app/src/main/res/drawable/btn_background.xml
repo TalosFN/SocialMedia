@@ -1,4 +1,17 @@
-<?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Заливка фона кнопки -->
+    <solid android:color="#6200EE" />  <!-- Стандартный фиолетовый цвет Material Design -->
 
-</selector>
+    <!-- Рамка -->
+    <stroke android:color="#3700B3" android:width="2dp" /> <!-- Цвет более темный для рамки -->
+
+    <!-- Закругленные углы -->
+    <corners android:radius="8dp" /> <!-- Округленные углы -->
+
+    <!-- Тень для кнопки (не обязательно) -->
+    <padding
+        android:left="10dp"
+        android:right="10dp"
+        android:top="10dp"
+        android:bottom="10dp" />
+</shape>
